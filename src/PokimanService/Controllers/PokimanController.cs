@@ -9,7 +9,7 @@ using PokimanService.Models;
 namespace PokimanService.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("pokeman")]
     public class PokimanController : ControllerBase
     {
 
@@ -20,12 +20,12 @@ namespace PokimanService.Controllers
             _logger = logger;
         }
 
-        [HttpGet("{Id}")]
-        public async Task<Pokiman> GetPokimanAsync(string Id)
+        [HttpGet("{name}")]
+        public Pokiman GetPokiman(string name)
         {
             return new Pokiman
             {
-                Name = Id,
+                Name = name,
                 Description = Guid.NewGuid().ToString()
             };
         }
