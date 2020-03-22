@@ -3,3 +3,4 @@ src/PokimanService.Tests/obj/**
 src/PokimanService/bin/**
 src/PokimanService/obj/**
 src/PokimanService.Tests/*.feature.cs
+.vscode
