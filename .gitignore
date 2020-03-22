@@ -1,0 +1,5 @@
+src/PokimanService.Tests/bin/**
+src/PokimanService.Tests/obj/**
+src/PokimanService/bin/**
+src/PokimanService/obj/**
+src/PokimanService.Tests/*.feature.cs
