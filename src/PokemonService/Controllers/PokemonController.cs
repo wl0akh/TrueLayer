@@ -4,26 +4,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using PokimanService.Models;
+using PokemonService.Models;
 
-namespace PokimanService.Controllers
+namespace PokemonService.Controllers
 {
     [ApiController]
-    [Route("pokeman")]
-    public class PokimanController : ControllerBase
+    [Route("pokemon")]
+    public class PokemonController : ControllerBase
     {
 
-        private readonly ILogger<PokimanController> _logger;
+        private readonly ILogger<PokemonController> _logger;
 
-        public PokimanController(ILogger<PokimanController> logger)
+        public PokemonController(ILogger<PokemonController> logger)
         {
             _logger = logger;
         }
 
         [HttpGet("{name}")]
-        public Pokiman GetPokiman(string name)
+        public Pokemon GetPokemon(string name)
         {
-            return new Pokiman
+            return new Pokemon
             {
                 Name = name,
                 Description = Guid.NewGuid().ToString()

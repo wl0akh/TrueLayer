@@ -1,8 +1,8 @@
 using System;
 
-namespace PokimanService.Models
+namespace PokemonService.Models
 {
-    public class Pokiman
+    public class Pokemon
     {
         public string Name { get; set; }
         public string Description { get; set; }

@@ -3,32 +3,32 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 
-namespace PokimanService.Tests
+namespace PokemonService.Tests
 {
 
     [Binding]
-    [Scope(Feature = "GetPokiman")]
-    public class PokimanSteps
+    [Scope(Feature = "GetPokemon")]
+    public class PokemonSteps
     {
 
         public Scenario scenario;
 
-        public PokimanSteps(Scenario scenario)
+        public PokemonSteps(Scenario scenario)
         {
             this.scenario = scenario;
         }
 
-        [Given(@"a (.*) pokiman name")]
-        public void GivenAValidPokimanName(string valid)
+        [Given(@"a (.*) pokemon name")]
+        public void GivenAValidPokemonName(string valid)
         {
             if (valid == "valid")
             {
-                this.scenario.PokimanName = "pikachu";
+                this.scenario.PokemonName = "pikachu";
             }
         }
 
-        [When(@"get on pokiman end point is called")]
-        public async Task WhenGetOnPokimanEndpointIsCalledAsync()
+        [When(@"get on pokemon end point is called")]
+        public async Task WhenGetOnPokemonEndpointIsCalledAsync()
         {
             await this.scenario.sendRequestAsync();
         }

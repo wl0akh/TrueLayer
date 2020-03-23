@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokimanService.Tests", "PokimanService.Tests\PokimanService.Tests.csproj", "{EFDC9454-222A-4F9C-A4E4-DD8F1585474F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokemonService.Tests", "PokemonService.Tests\PokemonService.Tests.csproj", "{EFDC9454-222A-4F9C-A4E4-DD8F1585474F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokimanService", "PokimanService\PokimanService.csproj", "{CE50F070-3066-43AE-899C-CC786A13FA9D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokemonService", "PokemonService\PokemonService.csproj", "{CE50F070-3066-43AE-899C-CC786A13FA9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

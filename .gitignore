@@ -1,6 +1,6 @@
-src/PokimanService.Tests/bin/**
-src/PokimanService.Tests/obj/**
-src/PokimanService/bin/**
-src/PokimanService/obj/**
-src/PokimanService.Tests/*.feature.cs
+src/PokemonService.Tests/bin/**
+src/PokemonService.Tests/obj/**
+src/PokemonService/bin/**
+src/PokemonService/obj/**
+src/PokemonService.Tests/*.feature.cs
 .vscode

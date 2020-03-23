@@ -1,2 +1,2 @@
 # TrueLayer
-shakespeare's pokeman for TrueLayer
+shakespeare's pokemon for TrueLayer
