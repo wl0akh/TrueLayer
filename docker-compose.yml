@@ -1,7 +1,7 @@
 version: "2.1"
 services:
   pokemon:
-    image: mcr.microsoft.com/dotnet/core/sdk:3.0
+    image: mcr.microsoft.com/dotnet/core/sdk:3.1.102
     ports:
       - "5001:5001"
     volumes: 
