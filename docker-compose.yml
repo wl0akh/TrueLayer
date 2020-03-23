@@ -1,0 +1,25 @@
+version: "2.1"
+services:
+  pokemon:
+    image: mcr.microsoft.com/dotnet/core/sdk:3.0
+    ports:
+      - "5001:5001"
+    volumes: 
+      - ./src/:/usr/app/
+    command: sh -c "cd /usr/app && dotnet test"
+    depends_on:
+      - mountebank
+      - redis
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    restart: always
+
+  mountebank:
+    image: jkris/mountebank
+    ports:
+      - "2525:2525"
+      - "2526:2526"
+    restart: always
