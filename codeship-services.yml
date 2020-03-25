@@ -1,0 +1,21 @@
+pokemon_testrunner:
+  image: mcr.microsoft.com/dotnet/core/sdk:3.1.102
+  volumes: 
+    - ./src/:/usr/app/
+  command: sh -c "cd /usr/app && dotnet test"
+  environment:
+    - POKEMON_API_HOST=http://mountebank:6081
+    - TRANSLATE_API_HOST=http://mountebank:6082
+    - REDIS_HOST=http://redis:6379
+    - MOUNTEBANK_HOST=http://mountebank:2525
+  depends_on:
+    - mountebank
+    - redis
+
+redis:
+  image: redis:alpine
+  restart: always
+
+mountebank:
+  image: jkris/mountebank
+  restart: always

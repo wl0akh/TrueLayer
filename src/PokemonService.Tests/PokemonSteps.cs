@@ -1,6 +1,10 @@
+using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using NUnit.Framework;
+using PokemonService.Models;
 using TechTalk.SpecFlow;
 
 namespace PokemonService.Tests
@@ -18,15 +22,59 @@ namespace PokemonService.Tests
             this.scenario = scenario;
         }
 
-        [Given(@"a (.*) pokemon name")]
-        public void GivenAValidPokemonName(string valid)
+        [Before]
+        public void Setup()
         {
-            if (valid == "valid")
+            if (Environment.GetEnvironmentVariable("POKEMON_API_HOST") == null)
             {
-                this.scenario.PokemonName = "pikachu";
+                Environment.SetEnvironmentVariable("POKEMON_API_HOST", "http://localhost:6081");
+            }
+            if (Environment.GetEnvironmentVariable("TRANSLATE_API_HOST") == null)
+            {
+                Environment.SetEnvironmentVariable("TRANSLATE_API_HOST", "http://localhost:6082");
+            }
+            if (Environment.GetEnvironmentVariable("REDIS_HOST") == null)
+            {
+                Environment.SetEnvironmentVariable("REDIS_HOST", "http://localhost:6379");
+            }
+            if (Environment.GetEnvironmentVariable("MOUNTEBANK_HOST") == null)
+            {
+                Environment.SetEnvironmentVariable("MOUNTEBANK_HOST", "http://localhost:2525");
             }
         }
 
+        [After]
+        public void TearDown()
+        {
+            this.scenario.TearDownCache();
+        }
+
+        [Given(@"pokemon has (.*) details")]
+        public void GivenPokemonApiHasDetails(string name)
+        {
+            this.scenario.MakePokemonApi(name);
+        }
+
+        [Given(@"translate api is up")]
+        public void GivenAPIsAreUp()
+        {
+            this.scenario.MakeTranslateApi();
+        }
+
+        [Given(@"a (.*) pokemon name as (.*)")]
+        public void GivenAValidPokemonName(string valid, string name)
+        {
+            if (valid == "valid")
+            {
+                this.scenario.PokemonName = name;
+            }
+            if (valid == "invalid")
+            {
+                this.scenario.PokemonName = Guid.NewGuid().ToString();
+            }
+        }
+
+        [Given(@"get on pokemon end point is already called")]
         [When(@"get on pokemon end point is called")]
         public async Task WhenGetOnPokemonEndpointIsCalledAsync()
         {
@@ -50,10 +98,20 @@ namespace PokemonService.Tests
             }
         }
 
-        [Then(@"response body contains (.*)")]
-        public void ThenResponseBodyContainsName(string filed)
+        [Then(@"response body contains pokimon model")]
+        public async Task ThenResponseBodyContainsField()
         {
-            // Assert.AreEqual(this.scenario.Response.Body, filed);
+            string jsonString = await this.scenario.Response.Content.ReadAsStringAsync();
+            Pokemon pokemon = JsonConvert.DeserializeObject<Pokemon>(jsonString);
+            Assert.IsNotNull(pokemon);
+            Assert.AreEqual(pokemon.Name, this.scenario.PokemonName);
+            Assert.IsNotEmpty(pokemon.Description);
+        }
+
+        [Then(@"response should come from (.*)")]
+        public void ThenResponseISFrom(string source)
+        {
+            Assert.AreEqual(source, this.scenario.Response.Headers.GetValues("X-Source").FirstOrDefault());
         }
     }
 }

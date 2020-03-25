@@ -20,6 +20,7 @@ namespace PokemonService
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseUrls("http://0.0.0.0:6080/");
                     webBuilder.UseStartup<Startup>();
                 });
     }

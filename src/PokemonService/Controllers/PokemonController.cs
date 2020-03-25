@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PokemonService.Models;
+using PokemonService.Queries;
 
 namespace PokemonService.Controllers
 {
@@ -13,21 +14,19 @@ namespace PokemonService.Controllers
     public class PokemonController : ControllerBase
     {
 
-        private readonly ILogger<PokemonController> _logger;
+        private readonly ILogger<PokemonController> logger;
+        private readonly IQuery query;
 
-        public PokemonController(ILogger<PokemonController> logger)
+        public PokemonController(ILogger<PokemonController> logger, IQuery query)
         {
-            _logger = logger;
+            this.logger = logger;
+            this.query = query;
         }
 
         [HttpGet("{name}")]
-        public Pokemon GetPokemon(string name)
+        public async Task<ActionResult<Pokemon>> GetPokemonAsync(string name)
         {
-            return new Pokemon
-            {
-                Name = name,
-                Description = Guid.NewGuid().ToString()
-            };
+            return await query.ExecuteAsync(name, this.HttpContext);
         }
     }
 }

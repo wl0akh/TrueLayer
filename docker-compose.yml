@@ -1,15 +1,25 @@
 version: "2.1"
 services:
-  pokemon:
+  pokemon_service:
     image: mcr.microsoft.com/dotnet/core/sdk:3.1.102
     ports:
-      - "5001:5001"
+    - "6080:6080"
     volumes: 
       - ./src/:/usr/app/
-    command: sh -c "cd /usr/app && dotnet test"
-    depends_on:
-      - mountebank
-      - redis
+    command: sh -c "cd /usr/app && dotnet run -p PokemonService/PokemonService.csproj"
+
+  # pokemon_testrunner:
+  #   image: mcr.microsoft.com/dotnet/core/sdk:3.1.102
+  #   volumes: 
+  #     - ./src/:/usr/app/
+  #   command: sh -c "cd /usr/app && dotnet test"
+  #   environment:
+  #     - POKEMON_API_HOST=http://localhost:6081
+  #     - TRANSLATE_API_HOST=http://localhost:6082
+  #     - REDIS_HOST=http://localhost:6379
+  #   depends_on:
+  #     - mountebank
+  #     - redis
 
   redis:
     image: redis:alpine
@@ -22,4 +32,6 @@ services:
     ports:
       - "2525:2525"
       - "2526:2526"
+      - "6081:6081"
+      - "6082:6082"
     restart: always
