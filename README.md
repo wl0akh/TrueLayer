@@ -1,5 +1,8 @@
+
+[![Build status](https://www.codeship.io/projects/70ffae40-510f-0138-2e7b-26b6454f2988/status?branch=master)]
 # TrueLayer
 shakespeare's pokemon for TrueLayer
+
 ## Instruction to Run the service
 ### Running in Docker 
 

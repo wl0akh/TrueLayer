@@ -1,3 +1,4 @@
 - name: pokemon_testrunner
+  tag: master
   service: testrunner
   command: sh -c "cd /usr/app && dotnet test"
