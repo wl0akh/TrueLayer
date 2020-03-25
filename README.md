@@ -10,7 +10,7 @@ shakespeare's pokemon for TrueLayer
 
 it should start the service at http://localhost:6080/pokemon/pikachu
 
-### Running locallu 
+### Running locally 
 ```
 cd src 
 dotnet run -p PokemonService/PokemonService.csproj 
