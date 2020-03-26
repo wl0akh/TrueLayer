@@ -52,11 +52,6 @@ namespace PokemonService.Queries
                 this.logger.LogError($"Error ForbiddenException {e}");
                 return new ForbidResult();
             }
-            catch (Exception e)
-            {
-                this.logger.LogError($"Error processing {e}");
-                return new NotFoundResult();
-            }
 
             return pokemon;
         }

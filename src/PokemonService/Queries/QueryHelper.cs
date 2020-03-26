@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -40,49 +39,56 @@ namespace PokemonService.Queries
 
         private static async Task<string> GetTranslationAsync(ILogger logger, string toBeTranslated)
         {
-            var formContent = new FormUrlEncodedContent(
-                    new[]{
-                        new KeyValuePair<string, string>("text", toBeTranslated)
-                    }
-                );
-
-            logger.LogDebug($"Making Post translate call to {translateApiHost}");
-
-            var translatedResponse = await client.PostAsync(
-                new Uri($"{translateApiHost}/translate/shakespeare.json"),
-                formContent
-                );
-
-            if (translatedResponse.StatusCode == HttpStatusCode.Forbidden)
+            string translation = "";
+            try
             {
-                throw new ForbiddenException("Translation can't be preformed");
+                var formContent = new FormUrlEncodedContent(
+                        new[]{
+                        new KeyValuePair<string, string>("text", toBeTranslated)
+                        }
+                    );
+
+                logger.LogDebug($"Making Post translate call to {translateApiHost}");
+
+                var translatedResponse = await client.PostAsync(
+                    new Uri($"{translateApiHost}/translate/shakespeare.json"),
+                    formContent
+                    );
+
+                string jsonTranslationString = await translatedResponse.Content.ReadAsStringAsync();
+                JObject transleted = JObject.Parse(jsonTranslationString);
+
+                logger.LogDebug($"Add translation to Pokemon Model");
+
+                translation = transleted["contents"]["translated"].ToString();
             }
-            string jsonTranslationString = await translatedResponse.Content.ReadAsStringAsync();
-            JObject transleted = JObject.Parse(jsonTranslationString);
-
-            logger.LogDebug($"Add translation to Pokemon Model");
-
-            string translation = transleted["contents"]["translated"].ToString();
+            catch (HttpRequestException e)
+            {
+                throw new ForbiddenException($"Translation can't be preformed {e}");
+            }
             return translation;
         }
 
         private static async Task<string> GetPokemonDescriptionAsync(string pokemonName, ILogger logger)
         {
+            string toBeTranslated = "";
             logger.LogDebug($"Making Get pokemon-species call to {pokemonApiHost}");
-
-            var pokemonResponse = await client.GetAsync(new Uri($"{pokemonApiHost}/api/v2/pokemon-species/{pokemonName}"));
-
-            if (pokemonResponse.StatusCode == HttpStatusCode.NotFound)
+            try
             {
-                throw new ResourceNotFoundException($"Pokemon not found {pokemonName} not found");
+                var pokemonResponse = await client.GetAsync(new Uri($"{pokemonApiHost}/api/v2/pokemon-species/{pokemonName}"));
+                logger.LogDebug($"Succeed Get pokemon-species call to {pokemonApiHost}");
+
+                string jsonString = await pokemonResponse.Content.ReadAsStringAsync();
+
+                JObject flavorTextEntries = JObject.Parse(jsonString);
+                IList<JToken> englishText = flavorTextEntries["flavor_text_entries"].Children().Where(x => "en".Equals(x["language"]["name"].ToString())).ToList();
+                toBeTranslated = englishText[0]["flavor_text"].ToString();
             }
-            logger.LogDebug($"Succeed Get pokemon-species call to {pokemonApiHost}");
+            catch (HttpRequestException e)
+            {
+                throw new ResourceNotFoundException($"Pokemon not found {pokemonName} not found{e}");
+            }
 
-            string jsonString = await pokemonResponse.Content.ReadAsStringAsync();
-
-            JObject flavorTextEntries = JObject.Parse(jsonString);
-            IList<JToken> englishText = flavorTextEntries["flavor_text_entries"].Children().Where(x => "en".Equals(x["language"]["name"].ToString())).ToList();
-            string toBeTranslated = englishText[0]["flavor_text"].ToString();
             return toBeTranslated;
         }
     }
